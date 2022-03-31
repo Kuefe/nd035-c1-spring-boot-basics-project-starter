@@ -173,12 +173,12 @@ class CloudStorageApplicationTests {
 	 * gracefully in your code. 
 	 * 
 	 * Read more about file size limits here: 
-	 * https://spring.io/guides/gs/uploading-files/ under the "Tuning File Upload Limits" section.
+	 * https://spring.io/guides/gs/uploading-files/ under the "Tuning FileMapper Upload Limits" section.
 	 */
 	@Test
 	public void testLargeUpload() {
 		// Create a test account
-		doMockSignUp("Large File","Test","LFT","123");
+		doMockSignUp("Large FileMapper","Test","LFT","123");
 		doLogIn("LFT", "123");
 
 		// Try to upload an arbitrary large file
@@ -194,7 +194,7 @@ class CloudStorageApplicationTests {
 		try {
 			webDriverWait.until(ExpectedConditions.presenceOfElementLocated(By.id("success")));
 		} catch (org.openqa.selenium.TimeoutException e) {
-			System.out.println("Large File upload failed");
+			System.out.println("Large FileMapper upload failed");
 		}
 		Assertions.assertFalse(driver.getPageSource().contains("HTTP Status 403 – Forbidden"));
 
