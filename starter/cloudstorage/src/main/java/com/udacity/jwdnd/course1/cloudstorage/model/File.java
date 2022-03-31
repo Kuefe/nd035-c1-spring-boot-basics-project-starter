@@ -8,7 +8,7 @@ public class File {
     private String filename;
     private String contenttype;
     private String filesize;
-    private Blob filedata;
+    private Byte[] filedata;
     private Integer userid;
 
     public Integer getFileId() {
@@ -43,11 +43,11 @@ public class File {
         this.filesize = filesize;
     }
 
-    public Blob getFiledata() {
+    public Byte[] getFiledata() {
         return filedata;
     }
 
-    public void setFiledata(Blob filedata) {
+    public void setFiledata(Byte[] filedata) {
         this.filedata = filedata;
     }
 
