@@ -8,7 +8,7 @@ public class File {
     private String filename;
     private String contenttype;
     private String filesize;
-    private Byte[] filedata;
+    private byte[] filedata;
     private Integer userid;
 
     public Integer getFileId() {
@@ -43,11 +43,11 @@ public class File {
         this.filesize = filesize;
     }
 
-    public Byte[] getFiledata() {
+    public byte[] getFiledata() {
         return filedata;
     }
 
-    public void setFiledata(Byte[] filedata) {
+    public void setFiledata(byte[] filedata) {
         this.filedata = filedata;
     }
 
