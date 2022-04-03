@@ -21,4 +21,8 @@ public class FileService {
     public void addFile(File file) {
         fileMapper.insert(file);
     }
+
+    public File getFileById(Integer fileId) {
+        return fileMapper.getFileByFileId(fileId);
+    }
 }
