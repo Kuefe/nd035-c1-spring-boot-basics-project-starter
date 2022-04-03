@@ -54,8 +54,8 @@ public class FileController {
             HttpServletResponse response,
             Model model
     ) {
-        List<File> files = this.fileService.getFiles();
-        model.addAttribute("uploadFiles", this.fileService.getFiles());
+//        List<File> files = this.fileService.getFiles();
+//        model.addAttribute("uploadFiles", this.fileService.getFiles());
 
         if (id != null) {
             System.out.println("id: " + id);
@@ -74,5 +74,15 @@ public class FileController {
             return file.getFiledata();
         }
         return null;
+    }
+
+    @GetMapping("delete/{id}")
+    public String handleDeleteFile(@PathVariable Integer id, Model model) {
+        if (id != null) {
+            fileService.deleteFileById(id);
+            List<File> files = this.fileService.getFiles();
+            model.addAttribute("uploadFiles", this.fileService.getFiles());
+        }
+        return "redirect:/home";
     }
 }

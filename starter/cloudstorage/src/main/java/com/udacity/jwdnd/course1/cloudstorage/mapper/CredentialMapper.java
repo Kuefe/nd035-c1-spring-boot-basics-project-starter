@@ -22,12 +22,12 @@ public interface CredentialMapper {
     @Update("UPDATE CREDENTIALS SET password = #{password} WHERE userid = #{userid}")
     int updatePasswordByUserid(Credential credential);
 
-    @Delete("DELETE * FROM CREDENTIALS WHERE credentialid = #{credentialid}")
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
     int deleteCredentialByCredentialid(Integer credentialid);
 
-    @Delete("DELETE * FROM CREDENTIALS WHERE userid = #{userid}")
+    @Delete("DELETE FROM CREDENTIALS WHERE userid = #{userid}")
     int deleteCredentialByUserid(Integer userid);
 
-    @Delete("DELETE * FROM CREDENTIALS WHERE username = #{username}")
+    @Delete("DELETE FROM CREDENTIALS WHERE username = #{username}")
     int deleteCredentialByUsername(String username);
 }
