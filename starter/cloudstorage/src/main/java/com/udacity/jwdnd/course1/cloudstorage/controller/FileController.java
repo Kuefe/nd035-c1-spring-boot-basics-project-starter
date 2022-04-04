@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 @Controller
 @RequestMapping("/file")
 public class FileController {
@@ -40,7 +37,7 @@ public class FileController {
         file.setFilesize(String.valueOf(fileUpload.getSize()));
         file.setFiledata(fileUpload.getInputStream().readAllBytes());
         file.setUserid(userService.getUser(authentication.getName()).getUserid());
-        fileService.addFile(file);
+        this.fileService.addFile(file);
 
         model.addAttribute("uploadFiles", this.fileService.getFiles());
 
@@ -54,11 +51,7 @@ public class FileController {
             HttpServletResponse response,
             Model model
     ) {
-//        List<File> files = this.fileService.getFiles();
-//        model.addAttribute("uploadFiles", this.fileService.getFiles());
-
         if (id != null) {
-            System.out.println("id: " + id);
             File file = this.fileService.getFileById(id);
             response.setContentType(file.getContenttype());
             String headerKey = "Content-Disposition";

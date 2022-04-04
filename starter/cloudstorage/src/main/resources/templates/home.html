@@ -29,7 +29,8 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-files" role="tabpanel" aria-labelledby="nav-files-tab">
-                <form action="#" th:action="@{/file/upload}" th:object="${file}" enctype="multipart/form-data" method="POST">
+                <form action="#" th:action="@{/file/upload}" th:object="${file}" enctype="multipart/form-data"
+                      method="POST">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
                             <div class="col-sm-2">
@@ -55,7 +56,8 @@
                         <tbody>
                         <tr th:each="uploadFile : ${uploadFiles}">
                             <td>
-                                <a class="btn btn-success" th:href="'/file/download/'+${uploadFile.fileId}" th:download="${uploadFile.filename}">View</a>
+                                <a class="btn btn-success" th:href="'/file/download/'+${uploadFile.fileId}"
+                                   th:download="${uploadFile.filename}">View</a>
                                 <a class="btn btn-danger" th:href="'/file/delete/'+${uploadFile.fileId}">Delete</a>
                             </td>
                             <th scope="row" th:text="${uploadFile.filename}">ExampleFile.txt</th>
@@ -65,7 +67,7 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                <button style="margin: 0.25em;" type="button" class="btn btn-info float-right"
+                <button style="margin: 0.25em;" name="editNoteButton" type="button" class="btn btn-info float-right"
                         onclick="showNoteModal()">
                     + Add a New Note
                 </button>
@@ -80,13 +82,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="note : ${notes}">
                             <td>
-                                <button type="button" class="btn btn-success"> Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button type="button" class="btn btn-success" th:href="'/note/edit/'+${note.noteid}"
+                                        th:onclick="showNoteModal([[${note.noteid}]],[[${note.notetitle}]],[[${note.notedescription}]])"> Edit</button>
+                                <a class="btn btn-danger" th:href="'/note/delete/'+${note.noteid}">Delete</a>
                             </td>
-                            <th scope="row">Example Note Title</th>
-                            <td>Example Note Description</td>
+                            <th scope="row" th:text="${note.notetitle}">Example Note Title</th>
+                            <td th:text="${note.notedescription}">Example Note Description </td>
                         </tr>
                         </tbody>
                     </table>
@@ -103,16 +106,16 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
-                                    <input type="hidden" name="noteId" id="note-id">
+                                <form action="#" th:action="@{/note/add}" th:object="${note}" method="POST">
+                                    <input th:field="*{noteid}" type="hidden" name="noteId" id="note-id">
                                     <div class="form-group">
                                         <label for="note-title" class="col-form-label">Title</label>
-                                        <input type="text" name="noteTitle" class="form-control" id="note-title"
+                                        <input th:field="*{notetitle}" type="text" name="noteTitle" class="form-control" id="note-title"
                                                maxlength="20" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="note-description" class="col-form-label">Description</label>
-                                        <textarea class="form-control" name="noteDescription" id="note-description"
+                                        <textarea th:field="*{notedescription}" class="form-control" name="noteDescription" id="note-description"
                                                   rows="5" maxlength="1000" required></textarea>
                                     </div>
                                     <button id="noteSubmit" type="submit" class="d-none"></button>
@@ -225,6 +228,8 @@
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
             }
+
+
 
 </script>
 </body>
