@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/file")
 public class FileController {
 
@@ -27,11 +27,12 @@ public class FileController {
     }
 
     @PostMapping("upload")
-    public String handleFileUpload(
+    public void handleFileUpload(
             Authentication authentication,
             @ModelAttribute("file") File file,
             @RequestParam("fileUpload") MultipartFile fileUpload,
-            Model model) throws IOException {
+            Model model,
+            HttpServletResponse response) throws IOException {
         file.setFilename(fileUpload.getOriginalFilename());
         file.setContenttype(fileUpload.getContentType());
         file.setFilesize(String.valueOf(fileUpload.getSize()));
@@ -41,11 +42,10 @@ public class FileController {
 
         model.addAttribute("uploadFiles", this.fileService.getFiles());
 
-        return "redirect:/home";
+        response.sendRedirect("/home");
     }
 
     @GetMapping("download/{id}")
-    public @ResponseBody
     byte[] handleFileDownload(
             @PathVariable Integer id,
             HttpServletResponse response,
@@ -70,12 +70,13 @@ public class FileController {
     }
 
     @GetMapping("delete/{id}")
-    public String handleDeleteFile(@PathVariable Integer id, Model model) {
+    public void handleDeleteFile(@PathVariable Integer id, Model model,
+                                   HttpServletResponse response) throws IOException {
         if (id != null) {
             fileService.deleteFileById(id);
             List<File> files = this.fileService.getFiles();
             model.addAttribute("uploadFiles", this.fileService.getFiles());
         }
-        return "redirect:/home";
+        response.sendRedirect("/home");
     }
 }
