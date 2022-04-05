@@ -70,12 +70,16 @@ public class FileController {
     }
 
     @GetMapping("delete/{id}")
-    public void handleDeleteFile(@PathVariable Integer id, Model model,
-                                   HttpServletResponse response) throws IOException {
+    public void handleDeleteFile(@PathVariable Integer id,
+                                 Model model,
+                                 HttpServletResponse response,
+                                 Authentication authentication) throws IOException {
         if (id != null) {
+            Integer userid = userService.getUser(authentication.getName()).getUserid();
+
             fileService.deleteFileById(id);
-            List<File> files = this.fileService.getFiles();
-            model.addAttribute("uploadFiles", this.fileService.getFiles());
+            List<File> files = this.fileService.getFilesByUserid(userid);
+            model.addAttribute("uploadFiles", files);
         }
         response.sendRedirect("/home");
     }

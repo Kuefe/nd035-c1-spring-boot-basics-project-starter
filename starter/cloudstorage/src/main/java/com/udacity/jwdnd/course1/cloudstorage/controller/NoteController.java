@@ -50,11 +50,13 @@ public class NoteController {
     }
 
     @GetMapping("delete/{id}")
-    public String deleteNote(@PathVariable Integer id, Model model) {
+    public String deleteNote(@PathVariable Integer id, Model model, Authentication authentication) {
         if (id != null) {
+            Integer userid = userService.getUser(authentication.getName()).getUserid();
+
             noteService.deleteNoteById(id);
-            List<Note> notes = this.noteService.getNotes();
-            model.addAttribute("notes", this.noteService.getNotes());
+            List<Note> notes = this.noteService.getNOtesByUserid(userid);
+            model.addAttribute("notes", notes);
         }
         return "redirect:/home";
     }

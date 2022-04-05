@@ -19,6 +19,10 @@ public class CredentialService {
         return credentialMapper.getCredentials();
     }
 
+    public List<Credential> getCredentialsByUserid(Integer userid) {
+        return credentialMapper.getCredentialByUserid(userid);
+    }
+
     public void addCredential(Credential credential) {
         credentialMapper.insert(credential);
     }

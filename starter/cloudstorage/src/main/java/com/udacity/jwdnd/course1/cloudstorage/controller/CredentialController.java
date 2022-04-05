@@ -24,15 +24,16 @@ public class CredentialController {
 
     @PostMapping("add")
     public String addCredential(Authentication authentication,
-                          @ModelAttribute("credential") Credential credential,
-                          Model model) {
+                                @ModelAttribute("credential") Credential credential,
+                                Model model) {
+        Integer userid = userService.getUser(authentication.getName()).getUserid();
         if (credential.getCredentialid() == null) {
-            credential.setUserid(userService.getUser(authentication.getName()).getUserid());
+            credential.setUserid(userid);
             this.credentialService.addCredential(credential);
         } else {
             this.credentialService.updateByCredentialId(credential);
         }
-        model.addAttribute("credentials", this.credentialService.getCredentials());
+        model.addAttribute("credentials", this.credentialService.getCredentialsByUserid(userid));
         return "redirect:/home";
     }
 
@@ -45,11 +46,13 @@ public class CredentialController {
     }
 
     @GetMapping("delete/{id}")
-    public String deleteCredential(@PathVariable Integer id, Model model) {
+    public String deleteCredential(@PathVariable Integer id, Model model, Authentication authentication) {
         if (id != null) {
+            Integer userid = userService.getUser(authentication.getName()).getUserid();
+
             credentialService.deleteCredentialById(id);
-            List<Credential> credentials = this.credentialService.getCredentials();
-            model.addAttribute("notes", this.credentialService.getCredentials());
+            List<Credential> credentials = this.credentialService.getCredentialsByUserid(userid);
+            model.addAttribute("credentials", credentials);
         }
         return "redirect:/home";
     }

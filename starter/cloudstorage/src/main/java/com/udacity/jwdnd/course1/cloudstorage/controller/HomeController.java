@@ -32,7 +32,10 @@ public class HomeController {
     private NoteService noteService;
     private UserService userService;
 
-    public HomeController(CredentialService credentialService, FileService fileService, NoteService noteService, UserService userService) {
+    public HomeController(CredentialService credentialService,
+                          FileService fileService,
+                          NoteService noteService,
+                          UserService userService) {
         this.credentialService = credentialService;
         this.fileService = fileService;
         this.noteService = noteService;
@@ -40,13 +43,18 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String getHomePage(Note note, Credential credential, Model model) {
-        List<Credential> credentials = this.credentialService.getCredentials();
-        List<File> files = this.fileService.getFiles();
-        List<Note> notes = this.noteService.getNotes();
-        model.addAttribute("credentials", this.credentialService.getCredentials());
-        model.addAttribute("uploadFiles", this.fileService.getFiles());
-        model.addAttribute("notes", this.noteService.getNotes());
+    public String getHomePage(Note note,
+                              Credential credential,
+                              Model model,
+                              Authentication authentication) {
+        Integer userid = userService.getUser(authentication.getName()).getUserid();
+
+        List<Credential> credentials = this.credentialService.getCredentialsByUserid(userid);
+        List<File> files = this.fileService.getFilesByUserid(userid);
+        List<Note> notes = this.noteService.getNOtesByUserid(userid);
+        model.addAttribute("credentials", credentials);
+        model.addAttribute("uploadFiles", files);
+        model.addAttribute("notes", notes);
         return "/home";
     }
 }

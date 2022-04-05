@@ -18,6 +18,10 @@ public class FileService {
         return fileMapper.getFiles();
     }
 
+    public List<File> getFilesByUserid(Integer userid) {
+        return fileMapper.getFileByUserid(userid);
+    }
+
     public void addFile(File file) {
         fileMapper.insert(file);
     }

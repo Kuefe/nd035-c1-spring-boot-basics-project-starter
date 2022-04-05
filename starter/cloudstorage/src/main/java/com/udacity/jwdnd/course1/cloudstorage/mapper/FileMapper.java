@@ -18,7 +18,7 @@ public interface FileMapper {
     File getFileByFileId(Integer fileId);
 
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
-    File getFileByUserid(Integer userid);
+    List<File> getFileByUserid(Integer userid);
 
     @Update("UPDATE FILES SET " +
             "filename = #{filename}, contenttype = #{contenttype}, filesize = #{filesize}, filedata=#{filedata}" +
