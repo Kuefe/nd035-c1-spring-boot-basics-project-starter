@@ -4,7 +4,6 @@ import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,16 +32,26 @@ public class FileController {
             @RequestParam("fileUpload") MultipartFile fileUpload,
             Model model,
             HttpServletResponse response) throws IOException {
-        file.setFilename(fileUpload.getOriginalFilename());
-        file.setContenttype(fileUpload.getContentType());
-        file.setFilesize(String.valueOf(fileUpload.getSize()));
-        file.setFiledata(fileUpload.getInputStream().readAllBytes());
-        file.setUserid(userService.getUser(authentication.getName()).getUserid());
-        this.fileService.addFile(file);
+        Integer userid = userService.getUser(authentication.getName()).getUserid();
+        String filename = fileUpload.getOriginalFilename();
 
-        model.addAttribute("uploadFiles", this.fileService.getFiles());
+        if (filename.length()>0 && this.fileService.checkFilename(userid, filename) == 0) {
+            file.setFilename(filename);
+            file.setContenttype(fileUpload.getContentType());
+            file.setFilesize(String.valueOf(fileUpload.getSize()));
+            file.setFiledata(fileUpload.getInputStream().readAllBytes());
+            file.setUserid(userid);
+            this.fileService.addFile(file);
 
-        response.sendRedirect("/home");
+            model.addAttribute("uploadFiles", this.fileService.getFiles());
+            response.sendRedirect("/result?success");
+        } else {
+            if (filename.length()==0) {
+                response.sendRedirect("/result?nofileselect");
+            } else {
+                response.sendRedirect("/result?erroruploadfile");
+            }
+        }
     }
 
     @GetMapping("download/{id}")
@@ -80,7 +89,9 @@ public class FileController {
             fileService.deleteFileById(id);
             List<File> files = this.fileService.getFilesByUserid(userid);
             model.addAttribute("uploadFiles", files);
+            response.sendRedirect("result?success");
+        } else {
+            response.sendRedirect("/home");
         }
-        response.sendRedirect("/home");
     }
 }

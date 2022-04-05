@@ -33,4 +33,8 @@ public class FileService {
     public int deleteFileById(Integer fileId) {
         return fileMapper.deleteFileByFileId(fileId);
     }
+
+    public int checkFilename(Integer userid, String filename) {
+        return fileMapper.checkFilename(userid, filename);
+    }
 }

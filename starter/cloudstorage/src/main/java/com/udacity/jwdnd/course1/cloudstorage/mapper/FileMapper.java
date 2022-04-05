@@ -20,6 +20,9 @@ public interface FileMapper {
     @Select("SELECT * FROM FILES WHERE userid = #{userid}")
     List<File> getFileByUserid(Integer userid);
 
+    @Select("SELECT count(*) FROM FILES WHERE userid = #{userid} AND filename = #{filename}")
+    int checkFilename(Integer userid, String filename);
+
     @Update("UPDATE FILES SET " +
             "filename = #{filename}, contenttype = #{contenttype}, filesize = #{filesize}, filedata=#{filedata}" +
             "WHERE fileId = #{fileId}")

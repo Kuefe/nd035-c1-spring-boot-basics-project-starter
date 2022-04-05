@@ -21,11 +21,6 @@ public class NoteController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public void getNotes() {
-        System.out.println("NoteController GetMapping");
-    }
-
     @PostMapping("add")
     public String addNote(Authentication authentication,
                           @ModelAttribute("note") Note note,
@@ -37,8 +32,7 @@ public class NoteController {
         } else {
             this.noteService.updateNoteById(note);
         }
-        model.addAttribute("notes", this.noteService.getNotes());
-        return "redirect:/home";
+        return "redirect:/result?success";
     }
 
     @GetMapping("edit/{id}")
@@ -57,7 +51,9 @@ public class NoteController {
             noteService.deleteNoteById(id);
             List<Note> notes = this.noteService.getNOtesByUserid(userid);
             model.addAttribute("notes", notes);
+            return "redirect:/result?success";
+        } else {
+            return "redirect:/home";
         }
-        return "redirect:/home";
     }
 }

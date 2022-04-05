@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -33,8 +32,7 @@ public class CredentialController {
         } else {
             this.credentialService.updateByCredentialId(credential);
         }
-        model.addAttribute("credentials", this.credentialService.getCredentialsByUserid(userid));
-        return "redirect:/home";
+        return "redirect:/result?success";
     }
 
     @GetMapping("edit/{id}")
@@ -53,7 +51,9 @@ public class CredentialController {
             credentialService.deleteCredentialById(id);
             List<Credential> credentials = this.credentialService.getCredentialsByUserid(userid);
             model.addAttribute("credentials", credentials);
+            return "redirect:/result?success";
+        } else {
+            return "redirect:/home";
         }
-        return "redirect:/home";
     }
 }
