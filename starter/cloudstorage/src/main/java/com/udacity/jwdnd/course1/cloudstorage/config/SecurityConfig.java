@@ -31,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .permitAll();
 
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
+
         http.formLogin()
                 .loginPage("/login")
                 .defaultSuccessUrl("/home", true)
