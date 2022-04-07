@@ -25,7 +25,7 @@ public class NoteController {
     public String addNote(Authentication authentication,
                           @ModelAttribute("note") Note note,
                           Model model) {
-        System.out.println(note.getNoteid());
+
         if (note.getNoteid() == null) {
             note.setUserid(userService.getUser(authentication.getName()).getUserid());
             this.noteService.addNote(note);
@@ -49,7 +49,7 @@ public class NoteController {
             Integer userid = userService.getUser(authentication.getName()).getUserid();
 
             noteService.deleteNoteById(id);
-            List<Note> notes = this.noteService.getNOtesByUserid(userid);
+            List<Note> notes = this.noteService.getNotesByUserid(userid);
             model.addAttribute("notes", notes);
             return "redirect:/result?success";
         } else {

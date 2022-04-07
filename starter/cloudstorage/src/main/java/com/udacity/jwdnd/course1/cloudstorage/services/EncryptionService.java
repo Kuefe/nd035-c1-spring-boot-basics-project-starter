@@ -6,11 +6,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.AlgorithmParameters;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.Base64;
+import java.util.Random;
 
 @Service
 public class EncryptionService {
@@ -28,7 +34,6 @@ public class EncryptionService {
                 | UnsupportedEncodingException | IllegalBlockSizeException | BadPaddingException e) {
             logger.error(e.getMessage());
         }
-
         return Base64.getEncoder().encodeToString(encryptedValue);
     }
 
@@ -47,4 +52,17 @@ public class EncryptionService {
 
         return new String(decryptedValue);
     }
+
+    public String generateKey() {
+        String seedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        Random rand = new Random();
+        while (i < 16) {
+            sb.append(seedChars.charAt(rand.nextInt(seedChars.length())));
+            i++;
+        }
+        return sb.toString();
+    }
+
 }

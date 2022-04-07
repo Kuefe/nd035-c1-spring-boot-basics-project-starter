@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,14 @@ import java.util.List;
 public class CredentialController {
     private CredentialService credentialService;
     private UserService userService;
+    private EncryptionService encryptionService;
 
-    public CredentialController(CredentialService credentialService, UserService userService) {
+    public CredentialController(CredentialService credentialService,
+                                UserService userService,
+                                EncryptionService encryptionService) {
         this.credentialService = credentialService;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
 
     @PostMapping("add")
@@ -28,19 +33,17 @@ public class CredentialController {
         Integer userid = userService.getUser(authentication.getName()).getUserid();
         if (credential.getCredentialid() == null) {
             credential.setUserid(userid);
+            credential.setKey(this.encryptionService.generateKey());
+            credential.setPassword(
+                    this.encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
             this.credentialService.addCredential(credential);
         } else {
+            credential.setKey(this.encryptionService.generateKey());
+            credential.setPassword(
+                    this.encryptionService.encryptValue(credential.getPassword(), credential.getKey()));
             this.credentialService.updateByCredentialId(credential);
         }
         return "redirect:/result?success";
-    }
-
-    @GetMapping("edit/{id}")
-    public String editCredential(@PathVariable Integer id, @ModelAttribute("credential") Credential credential, Model model) {
-        if (id != null) {
-            model.addAttribute("note", this.credentialService.getCredentialById(id));
-        }
-        return "redirect:/home";
     }
 
     @GetMapping("delete/{id}")

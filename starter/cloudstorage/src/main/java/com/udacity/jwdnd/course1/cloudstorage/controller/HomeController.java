@@ -3,10 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
-import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
-import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,15 +28,18 @@ public class HomeController {
     private FileService fileService;
     private NoteService noteService;
     private UserService userService;
+    private EncryptionService encryptionService;
 
     public HomeController(CredentialService credentialService,
                           FileService fileService,
                           NoteService noteService,
-                          UserService userService) {
+                          UserService userService,
+                          EncryptionService encryptionService) {
         this.credentialService = credentialService;
         this.fileService = fileService;
         this.noteService = noteService;
         this.userService = userService;
+        this.encryptionService = encryptionService;
     }
 
     @GetMapping("/home")
@@ -51,10 +51,13 @@ public class HomeController {
 
         List<Credential> credentials = this.credentialService.getCredentialsByUserid(userid);
         List<File> files = this.fileService.getFilesByUserid(userid);
-        List<Note> notes = this.noteService.getNOtesByUserid(userid);
+        List<Note> notes = this.noteService.getNotesByUserid(userid);
+
         model.addAttribute("credentials", credentials);
         model.addAttribute("uploadFiles", files);
         model.addAttribute("notes", notes);
+        model.addAttribute ("encryptionService", encryptionService);
+
         return "/home";
     }
 }
